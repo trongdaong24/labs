@@ -1,0 +1,41 @@
+services:
+  app:
+    image: voyager-lab-app          # dùng image đã load từ images/ (không build lại)
+    build: .                        # giữ lại để rebuild được khi cần (cần internet)
+    platform: linux/amd64           # image build sẵn là amd64; Mac Apple Silicon chạy qua emulation
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      APP_URL: http://localhost:8080
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - voyager_net
+
+  db:
+    image: mysql:8.0
+    platform: linux/amd64           # dùng image mysql amd64 đã load từ images/
+    restart: unless-stopped
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_DATABASE: voyager
+      MYSQL_USER: voyager
+      MYSQL_PASSWORD: voyager
+      MYSQL_ROOT_PASSWORD: rootpw
+    volumes:
+      - voyager_db:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-prootpw"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+    networks:
+      - voyager_net
+
+volumes:
+  voyager_db:
+
+networks:
+  voyager_net:

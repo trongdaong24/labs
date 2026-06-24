@@ -1,0 +1,11 @@
+# Image bundles (chạy offline) — không commit, vượt 100MB của GitHub
+images/
+*.tar
+*.tar.gz
+
+# Env / runtime
+.env
+**/.env
+
+# macOS
+.DS_Store
