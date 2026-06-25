@@ -10,15 +10,15 @@ Mỗi lab chạy bằng Docker Compose, độc lập trong thư mục riêng.
 
 | Thư mục | Lab | Cổng | Loại lỗi |
 |---------|-----|------|----------|
-| [`redis-cve-2022-0543/`](redis-cve-2022-0543/RUN.md) | Redis 5.0.7 | 6379 | Lua sandbox escape → RCE (CVE-2022-0543) |
+| [`redis-cve-2022-0543/`](redis-cve-2022-0543/RUN.md) | Redis 5.0.7 (+ SSH banner) | 6379, 22 | Lua sandbox escape → RCE (CVE-2022-0543); port 22 chỉ hiện banner, không cho login |
 | [`voyager-lab/`](voyager-lab/RUN.md) | Laravel 9 + Voyager 1.6 | 8080 | Default creds + media-upload RCE |
 
 Hướng dẫn chạy + PoC chi tiết nằm trong `RUN.md` của từng lab.
 
 ## Chạy nhanh
 ```bash
-# Redis
-cd redis-cve-2022-0543 && docker compose up -d
+# Redis (+ SSH banner)
+cd redis-cve-2022-0543 && docker compose up -d --build
 
 # Voyager (build lần đầu mất vài phút)
 cd voyager-lab && docker compose up -d --build
